@@ -1,0 +1,6 @@
+{
+  "name": "RuangArah BK - Layanan Cyber Counseling Siswa SMA/SMK",
+  "description": "Platform Bimbingan dan Konseling interaktif untuk siswa SMA/SMK dalam bimbingan pribadi, sosial, belajar, dan karier serta simulasi penjadwalan konseling ramah privasi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
