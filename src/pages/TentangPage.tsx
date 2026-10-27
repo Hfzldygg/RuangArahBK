@@ -14,13 +14,11 @@ import { Page } from '../types';
 
 interface TentangPageProps {
   onNavigate: (page: Page) => void;
-  onOpenAcademicReport: () => void;
   onOpenPetaArahku: () => void;
 }
 
 export const TentangPage: React.FC<TentangPageProps> = ({
   onNavigate,
-  onOpenAcademicReport,
   onOpenPetaArahku,
 }) => {
   return (
@@ -118,25 +116,31 @@ export const TentangPage: React.FC<TentangPageProps> = ({
         </div>
       </div>
 
-      {/* Academic Doc Callout */}
+      {/* Action Callout */}
       <div className="p-6 rounded-3xl bg-[#244D42] text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div className="space-y-1 max-w-xl">
           <h4 className="text-base font-bold flex items-center gap-2">
-            <GraduationCap className="w-5 h-5 text-[#A8C9B5]" />
-            <span>Dokumen Rancangan untuk Dosen & Akademik</span>
+            <HeartHandshake className="w-5 h-5 text-[#A8C9B5]" />
+            <span>Punya Pertanyaan atau Butuh Teman Bercerita?</span>
           </h4>
           <p className="text-xs text-[#D1DDD7] leading-relaxed">
-            Butuh laporan lengkap 7 poin rancangan sistem untuk presentasi atau pengumpulan tugas
-            kuliah? Kamu bisa membaca dan menyalinnya langsung.
+            Guru BK sekolah selalu siap menyambutmu dengan hangat, aman, dan tanpa menghakimi.
           </p>
         </div>
-        <button
-          onClick={onOpenAcademicReport}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-[#244D42] hover:bg-[#FAF7F2] text-xs font-bold rounded-xl transition-colors shrink-0 shadow-xs"
-        >
-          <FileText className="w-4 h-4" />
-          <span>Lihat Naskah Laporan Dosen</span>
-        </button>
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => onNavigate('tanya')}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-xl transition-colors shrink-0"
+          >
+            <span>Buka Ruang Tanya</span>
+          </button>
+          <button
+            onClick={() => onNavigate('konseling')}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-white text-[#244D42] hover:bg-[#FAF7F2] text-xs font-bold rounded-xl transition-colors shrink-0 shadow-xs"
+          >
+            <span>Ajukan Konseling</span>
+          </button>
+        </div>
       </div>
     </div>
   );

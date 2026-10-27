@@ -20,7 +20,6 @@ interface HomePageProps {
   onSelectCategory: (category: BKCategory) => void;
   onOpenArticle: (article: Article) => void;
   onOpenPetaArahku: () => void;
-  onOpenAcademicReport: () => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({

@@ -6,9 +6,11 @@ import {
   Calendar,
   MessageCircle,
   AlertTriangle,
+  Lock,
+  ArrowRight,
   Settings,
-  Info,
-  Sparkles,
+  ShieldCheck,
+  CheckCircle2,
 } from 'lucide-react';
 import { FAQ_DATA } from '../data/bkData';
 import { Page, BKCategory } from '../types';
@@ -27,10 +29,10 @@ export const RuangTanyaPage: React.FC<RuangTanyaPageProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string>('semua');
   const [openFaqId, setOpenFaqId] = useState<string | null>('faq-1');
 
-  // WhatsApp configuration simulation
+  // WhatsApp configuration simulation state (Sesuai Poin 6 Ketentuan Prompt 1)
   const [isConfiguringWa, setIsConfiguringWa] = useState(false);
   const [customWaNumber, setCustomWaNumber] = useState('');
-  const [activeWaNumber, setActiveWaNumber] = useState('');
+  const [activeWaNumber, setActiveWaNumber] = useState(''); // Default kosong: "Kontak resmi sekolah belum diatur"
   const [waNoticeModal, setWaNoticeModal] = useState(false);
 
   const toggleFaq = (id: string) => {
@@ -57,27 +59,37 @@ export const RuangTanyaPage: React.FC<RuangTanyaPageProps> = ({
       setWaNoticeModal(true);
     } else {
       window.open(
-        `https://wa.me/${activeWaNumber.replace(/[^0-9]/g, '')}?text=Halo%20Admin%20Guru%20BK,%20saya%20ingin%20bertanya%20jadwal%20layanan.`,
+        `https://wa.me/${activeWaNumber.replace(/[^0-9]/g, '')}?text=Halo%20Admin%20Guru%20BK,%20saya%20ingin%20menanyakan%20informasi%20layanan%20BK.`,
         '_blank'
       );
     }
   };
 
+  const handleSaveWaConfig = (e: React.FormEvent) => {
+    e.preventDefault();
+    setActiveWaNumber(customWaNumber.trim());
+    setIsConfiguringWa(false);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-14 space-y-10 text-left">
-      {/* Header (Exact Match to Mockup Screen 6) */}
+      {/* Header */}
       <div className="space-y-2 max-w-2xl">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EAF6EF] text-[#2E7D52] text-xs font-bold">
+          <MessageCircle className="w-3.5 h-3.5" />
+          <span>Layanan Informasi & Tanya Jawab Siswa</span>
+        </div>
         <h1 className="text-2xl sm:text-4xl font-bold text-[#1C2E28] tracking-tight">
-          Ruang Tanya
+          Ruang Tanya Guru BK
         </h1>
         <p className="text-xs sm:text-sm text-[#526B61] leading-relaxed">
-          Temukan jawaban untuk pertanyaan umum atau ajukan permohonan konseling jika kamu membutuhkan
-          bantuan lebih lanjut.
+          Temukan jawaban untuk pertanyaan umum seputar sekolah dan pengembangan diri, atau ajukan
+          permohonan konseling jika kamu membutuhkan ruang privat.
         </p>
       </div>
 
-      {/* Two Tab Buttons: Pertanyaan Umum vs Permohonan Konseling */}
-      <div className="flex items-center gap-3">
+      {/* Bagian A & B Switcher Tabs */}
+      <div className="flex flex-wrap items-center gap-3">
         <button
           onClick={() => setActiveTab('faq')}
           className={`px-5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
@@ -86,41 +98,45 @@ export const RuangTanyaPage: React.FC<RuangTanyaPageProps> = ({
               : 'bg-white border border-[#DFD8CC] text-[#526B61] hover:bg-[#F2ECE3]'
           }`}
         >
-          Pertanyaan Umum
+          Bagian A: Pertanyaan Umum (FAQ)
         </button>
 
         <button
-          onClick={() => {
-            setActiveTab('konseling');
-            onNavigate('konseling');
-          }}
+          onClick={() => setActiveTab('konseling')}
           className={`px-5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
             activeTab === 'konseling'
               ? 'bg-[#244D42] text-white shadow-xs'
               : 'bg-white border border-[#DFD8CC] text-[#526B61] hover:bg-[#F2ECE3]'
           }`}
         >
-          Permohonan Konseling
+          Bagian B: Permohonan Konseling Pribadi & WhatsApp
         </button>
       </div>
 
-      {/* Main 2-Column Grid (Exact Match to Mockup Screen 6) */}
+      {/* Main Grid View */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left FAQ Section (7 Cols) */}
+        {/* BAGIAN A: PERTANYAAN UMUM (7 COLS) */}
         <div className="lg:col-span-7 space-y-5">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base sm:text-lg font-bold text-[#1C2E28]">
+              Pertanyaan yang Sering Diajukan
+            </h2>
+            <span className="text-xs text-[#637970]">{filteredFaqs.length} pertanyaan</span>
+          </div>
+
           {/* Search Bar */}
           <div className="relative">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari pertanyaan..."
+              placeholder="Cari pertanyaan... (misal: gugup, jurusan, rahasia, cemas)"
               className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#DFD8CC] bg-white text-xs sm:text-sm text-[#1C2E28] placeholder:text-[#9FB0A9] focus:outline-hidden focus:ring-2 focus:ring-[#244D42]"
             />
             <Search className="w-4 h-4 text-[#8C9E96] absolute left-3.5 top-3" />
           </div>
 
-          {/* Filter Pills (Exact Match: Semua, Belajar, Pertemanan, Karier, Studi Lanjut, Pribadi) */}
+          {/* Filter Pills */}
           <div className="flex flex-wrap items-center gap-2 text-xs">
             {[
               { id: 'semua', label: 'Semua' },
@@ -144,7 +160,7 @@ export const RuangTanyaPage: React.FC<RuangTanyaPageProps> = ({
             ))}
           </div>
 
-          {/* FAQ Accordion List (with + and -) */}
+          {/* FAQ Accordion List */}
           <div className="space-y-3 pt-2">
             {filteredFaqs.map((faq) => {
               const isOpen = openFaqId === faq.id;
@@ -176,56 +192,145 @@ export const RuangTanyaPage: React.FC<RuangTanyaPageProps> = ({
           </div>
         </div>
 
-        {/* Right Counselor Action Card (5 Cols, Exact Match to Mockup Screen 6) */}
-        <div className="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-[#ECE5DA] shadow-2xs space-y-5 text-center">
-          <div className="space-y-2">
-            <h3 className="text-base font-bold text-[#1C2E28]">Belum menemukan jawaban?</h3>
-            <p className="text-xs text-[#637970] leading-relaxed max-w-sm mx-auto">
-              Layanan ini untuk membantumu langsung kepada guru BK atau pembimbing sekolah.
-            </p>
-          </div>
+        {/* BAGIAN B: PERMOHONAN KONSELING PRIBADI & WHATSAPP (5 COLS) */}
+        <div className="lg:col-span-5 space-y-6">
+          {/* Card Permohonan Konseling Pribadi (Sesuai Poin 6 Prompt) */}
+          <div className="bg-white rounded-3xl p-6 sm:p-7 border border-[#ECE5DA] shadow-2xs space-y-4 text-left">
+            <div className="w-10 h-10 rounded-xl bg-[#EAF6EF] text-[#2E7D52] flex items-center justify-center">
+              <Lock className="w-5 h-5" />
+            </div>
 
-          {/* Action Buttons */}
-          <div className="space-y-2.5 max-w-xs mx-auto">
+            <div className="space-y-1">
+              <h3 className="text-base font-bold text-[#1C2E28]">
+                Permohonan Konseling Pribadi
+              </h3>
+              <p className="text-xs text-[#526B61] leading-relaxed">
+                Kami <strong>tidak menyediakan kolom komentar publik</strong> untuk menceritakan
+                masalah pribadi demi menjaga kehormatan dan kerahasiaan siswa.
+              </p>
+            </div>
+
+            <div className="p-3 bg-[#FAF7F2] rounded-xl border border-[#E5DFD5] text-xs text-[#526B61] space-y-1">
+              <span className="font-bold text-[#1C2E28] block">Alur yang Aman:</span>
+              <p>
+                Siswa langsung diarahkan menuju halaman pengajuan jadwal konseling yang terlindungi.
+              </p>
+            </div>
+
             <button
               onClick={() => onNavigate('konseling')}
-              className="w-full py-2.5 px-4 rounded-full bg-[#244D42] hover:bg-[#1A3B33] text-white text-xs font-semibold shadow-xs transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-xl bg-[#244D42] hover:bg-[#1A3B33] text-white font-bold text-xs shadow-xs transition-colors flex items-center justify-center gap-2"
             >
-              <Calendar className="w-3.5 h-3.5" />
-              <span>Ajukan Konseling</span>
+              <Calendar className="w-4 h-4" />
+              <span>Buka Formulir Konseling Privat</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
-
-            <button
-              onClick={handleWhatsAppClick}
-              className="w-full py-2.5 px-4 rounded-full border border-[#244D42] text-[#244D42] hover:bg-[#FAF7F2] text-xs font-semibold transition-colors flex items-center justify-center gap-2"
-            >
-              <MessageCircle className="w-3.5 h-3.5" />
-              <span>Hubungi Admin BK</span>
-            </button>
-            <p className="text-[10px] text-[#9FB0A9]">Kontak resmi belum diatur.</p>
           </div>
 
-          {/* Friendly Counselor Graphic with Lightbulb Icon */}
-          <div className="pt-2 flex justify-center">
-            <div className="w-28 h-28 rounded-full bg-[#EBF6EF] border-2 border-[#D2ECD9] flex items-center justify-center relative overflow-hidden">
-              <svg viewBox="0 0 100 100" className="w-full h-full">
-                <circle cx="50" cy="50" r="50" fill="#EBF6EF" />
-                <circle cx="50" cy="42" r="18" fill="#FFE0CC" />
-                <path d="M26 40 C26 22 74 22 74 40 C74 58 64 60 50 54 C36 60 26 58 26 40 Z" fill="#244D42" />
-                <circle cx="44" cy="40" r="2" fill="#1C2E28" />
-                <circle cx="56" cy="40" r="2" fill="#1C2E28" />
-                <path d="M47 48 Q50 51 53 48" stroke="#D96B43" strokeWidth="2" strokeLinecap="round" fill="none" />
-                <path d="M24 90 C24 66 36 60 50 60 C64 60 76 66 76 90 Z" fill="#2E7D52" />
-              </svg>
-              <div className="absolute top-1 right-1 w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-xs">
-                💡
+          {/* Card WhatsApp Admin BK (Sesuai Poin 6: Tidak ada nomor palsu, ada konfigurasi resmi, peringatan privasi pihak ketiga) */}
+          <div className="bg-white rounded-3xl p-6 sm:p-7 border border-[#ECE5DA] shadow-2xs space-y-4 text-left">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-xl bg-[#EAF6EF] text-[#2E7D52]">
+                  <MessageCircle className="w-4 h-4" />
+                </div>
+                <h3 className="text-sm font-bold text-[#1C2E28]">
+                  Hubungi Admin BK melalui WhatsApp
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsConfiguringWa(!isConfiguringWa)}
+                className="p-1 rounded text-[#8C9E96] hover:text-[#1C2E28]"
+                title="Konfigurasi nomor sekolah"
+              >
+                <Settings className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-xs text-[#637970] leading-relaxed">
+              Kanal tambahan untuk menanyakan jadwal piket guru BK atau informasi umum sekolah.
+            </p>
+
+            {/* Status Nomor Resmi */}
+            <div className="p-3 bg-[#FAF7F2] rounded-xl border border-[#E5DFD5] text-xs space-y-1">
+              <span className="text-[#8C9E96] block text-[11px] font-medium">Status Nomor Resmi:</span>
+              {activeWaNumber ? (
+                <span className="font-mono font-bold text-[#2E7D52]">
+                  {activeWaNumber} (Terhubung)
+                </span>
+              ) : (
+                <span className="font-semibold text-amber-800">
+                  Kontak resmi sekolah belum diatur
+                </span>
+              )}
+            </div>
+
+            {/* Formulir Konfigurasi Nomor (Simulasi untuk Pengelola Sekolah) */}
+            {isConfiguringWa && (
+              <form onSubmit={handleSaveWaConfig} className="p-3 bg-[#EAF6EF] rounded-xl border border-[#D2ECD9] space-y-2">
+                <span className="text-[11px] font-bold text-[#244D42] block">
+                  Pengaturan Nomor WhatsApp Guru BK:
+                </span>
+                <input
+                  type="text"
+                  placeholder="Contoh: 6281234567890"
+                  value={customWaNumber}
+                  onChange={(e) => setCustomWaNumber(e.target.value)}
+                  className="w-full px-3 py-1.5 text-xs rounded-lg border border-[#D2ECD9] bg-white text-[#1C2E28]"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="submit"
+                    className="px-3 py-1 rounded bg-[#244D42] text-white text-[11px] font-bold"
+                  >
+                    Simpan
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveWaNumber('');
+                      setCustomWaNumber('');
+                      setIsConfiguringWa(false);
+                    }}
+                    className="px-2 py-1 rounded text-[#526B61] text-[11px]"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* Tombol WhatsApp */}
+            <button
+              onClick={handleWhatsAppClick}
+              className={`w-full py-2.5 rounded-full text-xs font-semibold flex items-center justify-center gap-2 transition-colors ${
+                activeWaNumber
+                  ? 'bg-[#2E7D52] hover:bg-[#256643] text-white'
+                  : 'bg-[#FAF7F2] hover:bg-[#F2ECE3] text-[#526B61] border border-[#DFD8CC]'
+              }`}
+            >
+              <MessageCircle className="w-4 h-4" />
+              <span>
+                {activeWaNumber
+                  ? 'Hubungi Admin BK melalui WhatsApp'
+                  : 'Periksa Kontak WhatsApp Resmi'}
+              </span>
+            </button>
+
+            {/* Peringatan Privasi Pihak Ketiga (Wajib sesuai prompt 1) */}
+            <div className="p-3 rounded-xl bg-amber-50/80 border border-amber-200 text-[11px] text-amber-900 leading-relaxed flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+              <div>
+                <strong>Peringatan Privasi:</strong> WhatsApp merupakan layanan pihak ketiga. Tidak
+                dianjurkan untuk mengirim cerita pribadi yang sensitif melalui chat sebelum memahami
+                risiko privasinya.
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* WhatsApp Modal Notice */}
+      {/* MODAL KETIKA NOMOR BELUM DIATUR */}
       {waNoticeModal && (
         <div
           role="dialog"
@@ -233,16 +338,25 @@ export const RuangTanyaPage: React.FC<RuangTanyaPageProps> = ({
           className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in"
         >
           <div className="bg-[#FAF7F2] rounded-3xl max-w-sm w-full p-6 space-y-4 border border-[#E5DFD5] shadow-xl text-left">
-            <h4 className="text-sm font-bold text-[#1C2E28]">Kontak Resmi Sekolah Belum Diatur</h4>
-            <p className="text-xs text-[#526B61] leading-relaxed">
-              Nomor WhatsApp resmi Guru BK akan dipasang saat implementasi riil sekolah. Untuk sesi
-              privat, silakan gunakan menu <strong>Ajukan Konseling</strong>.
+            <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-[#1C2E28]">Kontak Resmi Sekolah Belum Diatur</h4>
+              <p className="text-xs text-[#526B61] mt-1.5 leading-relaxed">
+                Sesuai prinsip etika, sistem ini tidak menggunakan nomor palsu dan tidak membuka
+                tautan yang tidak berfungsi. Kontak resmi akan dipasang oleh pihak sekolah saat
+                peluncuran definitif.
+              </p>
+            </div>
+            <p className="text-[11px] text-[#8C9E96]">
+              *Anda dapat mencoba menyetel nomor melalui tombol ikon roda gigi pengaturan di pojok kartu WhatsApp.
             </p>
             <button
               onClick={() => setWaNoticeModal(false)}
-              className="w-full py-2 bg-[#244D42] text-white rounded-full text-xs font-semibold"
+              className="w-full py-2 rounded-full bg-[#244D42] text-white text-xs font-semibold"
             >
-              Mengerti
+              Mengerti & Kembali
             </button>
           </div>
         </div>

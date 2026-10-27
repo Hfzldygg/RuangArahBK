@@ -5,10 +5,6 @@ import {
   Menu,
   X,
   Search,
-  LogIn,
-  Compass,
-  Calendar,
-  FileText,
   User,
 } from 'lucide-react';
 import { Page } from '../types';
@@ -17,14 +13,12 @@ interface NavbarProps {
   currentPage: Page;
   onNavigate: (page: Page) => void;
   onOpenPetaArahku: () => void;
-  onOpenAcademicReport: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentPage,
   onNavigate,
   onOpenPetaArahku,
-  onOpenAcademicReport,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
@@ -49,7 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <header className="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b border-[#ECE5DA]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            {/* Left Brand with Logo & Tagline (Matching Mockup) */}
+            {/* Left Brand with Logo & Tagline */}
             <button
               onClick={() => handleNavClick('beranda')}
               className="flex items-center gap-3 text-left group focus-visible:outline-hidden"
@@ -68,8 +62,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             </button>
 
-            {/* Desktop Navigation Links (Centered, Matching Mockup) */}
-            <nav className="hidden md:flex items-center gap-1.5 lg:gap-3 text-xs sm:text-[13px] font-medium text-[#465E54]">
+            {/* Desktop Navigation Links (with Ruang Tanya added) */}
+            <nav className="hidden lg:flex items-center gap-1.5 lg:gap-2.5 text-xs sm:text-[13px] font-medium text-[#465E54]">
               <button
                 onClick={() => handleNavClick('beranda')}
                 className={`px-3 py-1.5 rounded-lg transition-colors ${
@@ -97,6 +91,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Peta Arahku
               </button>
               <button
+                onClick={() => handleNavClick('tanya')}
+                className={`px-3 py-1.5 rounded-lg transition-colors ${
+                  currentPage === 'tanya'
+                    ? 'text-[#1C2E28] font-bold bg-[#EDE7DD]'
+                    : 'hover:text-[#1C2E28] hover:bg-[#F2ECE3]'
+                }`}
+              >
+                Ruang Tanya
+              </button>
+              <button
                 onClick={() => handleNavClick('konseling')}
                 className={`px-3 py-1.5 rounded-lg transition-colors ${
                   currentPage === 'konseling'
@@ -107,6 +111,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Jadwal Konseling
               </button>
               <button
+                onClick={() => handleNavClick('masa-depan')}
+                className={`px-3 py-1.5 rounded-lg transition-colors ${
+                  currentPage === 'masa-depan'
+                    ? 'text-[#1C2E28] font-bold bg-[#EDE7DD]'
+                    : 'hover:text-[#1C2E28] hover:bg-[#F2ECE3]'
+                }`}
+              >
+                Masa Depan
+              </button>
+              <button
                 onClick={() => handleNavClick('perpustakaan')}
                 className={`px-3 py-1.5 rounded-lg transition-colors ${
                   currentPage === 'perpustakaan'
@@ -115,6 +129,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 Artikel
+              </button>
+              <button
+                onClick={() => handleNavClick('privasi')}
+                className={`px-3 py-1.5 rounded-lg transition-colors ${
+                  currentPage === 'privasi'
+                    ? 'text-[#1C2E28] font-bold bg-[#EDE7DD]'
+                    : 'hover:text-[#1C2E28] hover:bg-[#F2ECE3]'
+                }`}
+              >
+                Privasi & Etika
               </button>
               <button
                 onClick={() => handleNavClick('tentang')}
@@ -128,9 +152,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             </nav>
 
-            {/* Right Action Icons & Masuk Button (Matching Mockup) */}
-            <div className="hidden md:flex items-center gap-3">
-              {/* Search Icon */}
+            {/* Right Action: Search & Masuk (Laporan Tugas completely removed) */}
+            <div className="hidden lg:flex items-center gap-3">
               <button
                 onClick={() => setSearchModalOpen(true)}
                 className="p-2 rounded-full text-[#465E54] hover:text-[#1C2E28] hover:bg-[#ECE5DA] transition-colors"
@@ -140,17 +163,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <Search className="w-4 h-4" />
               </button>
 
-              {/* Laporan Dosen Doc helper */}
-              <button
-                onClick={onOpenAcademicReport}
-                className="p-2 rounded-full text-[#465E54] hover:text-[#1C2E28] hover:bg-[#ECE5DA] transition-colors"
-                title="Lihat naskah laporan tugas dosen"
-                aria-label="Laporan tugas"
-              >
-                <FileText className="w-4 h-4" />
-              </button>
-
-              {/* Masuk Button (Deep Sage Green Pill) */}
               <button
                 onClick={() => setLoginModalOpen(true)}
                 className="px-5 py-2 rounded-full bg-[#244D42] hover:bg-[#1A3B33] text-white text-xs font-semibold shadow-xs transition-all flex items-center gap-1.5"
@@ -160,7 +172,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* Mobile Hamburger Menu Toggle */}
-            <div className="flex items-center gap-2 md:hidden">
+            <div className="flex items-center gap-2 lg:hidden">
               <button
                 onClick={() => setSearchModalOpen(true)}
                 className="p-2 text-[#465E54] hover:text-[#1C2E28]"
@@ -179,9 +191,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* Mobile Menu Drawer (Matching Mockup Kanan Bawah) */}
+        {/* Mobile Menu Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[#FAF7F2] border-t border-[#ECE5DA] px-5 py-6 space-y-4 shadow-lg animate-in slide-in-from-top-2">
+          <div className="lg:hidden bg-[#FAF7F2] border-t border-[#ECE5DA] px-5 py-6 space-y-4 shadow-lg animate-in slide-in-from-top-2">
             <div className="text-xs font-bold text-[#637970] uppercase tracking-wider">
               Layanan BK
             </div>
@@ -229,16 +241,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Peta Arahku (Refleksi Kebutuhan)
               </button>
               <button
+                onClick={() => handleNavClick('tanya')}
+                className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#ECE5DA] font-semibold"
+              >
+                Ruang Tanya & FAQ
+              </button>
+              <button
                 onClick={() => handleNavClick('konseling')}
                 className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#ECE5DA]"
               >
                 Jadwal Konseling
-              </button>
-              <button
-                onClick={() => handleNavClick('perpustakaan')}
-                className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#ECE5DA]"
-              >
-                Artikel Edukasi
               </button>
               <button
                 onClick={() => handleNavClick('masa-depan')}
@@ -247,10 +259,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 Jelajah Masa Depan
               </button>
               <button
-                onClick={() => handleNavClick('tanya')}
+                onClick={() => handleNavClick('perpustakaan')}
                 className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#ECE5DA]"
               >
-                Ruang Tanya & FAQ
+                Artikel Edukasi
               </button>
               <button
                 onClick={() => handleNavClick('privasi')}
@@ -266,22 +278,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             </div>
 
-            <div className="pt-2 border-t border-[#ECE5DA] flex items-center justify-between gap-2">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenAcademicReport();
-                }}
-                className="py-2.5 px-4 bg-white border border-[#DFD8CC] text-[#244D42] text-xs font-semibold rounded-full w-1/2"
-              >
-                Laporan Dosen
-              </button>
+            <div className="pt-2 border-t border-[#ECE5DA]">
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   setLoginModalOpen(true);
                 }}
-                className="py-2.5 px-4 bg-[#244D42] text-white text-xs font-semibold rounded-full w-1/2"
+                className="py-2.5 px-4 bg-[#244D42] text-white text-xs font-semibold rounded-full w-full"
               >
                 Masuk
               </button>

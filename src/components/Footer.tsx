@@ -1,24 +1,20 @@
 import React from 'react';
 import {
   MessageSquare,
-  Leaf,
   ShieldAlert,
   Lock,
   PhoneCall,
-  FileText,
   ExternalLink,
 } from 'lucide-react';
 import { Page } from '../types';
 
 interface FooterProps {
   onNavigate: (page: Page) => void;
-  onOpenAcademicReport: () => void;
   onOpenPetaArahku: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   onNavigate,
-  onOpenAcademicReport,
   onOpenPetaArahku,
 }) => {
   return (
@@ -70,15 +66,6 @@ export const Footer: React.FC<FooterProps> = ({
               Layanan Bimbingan dan Konseling berbasis web untuk siswa SMA/SMK dengan guru BK
               sebagai pengelola layanannya.
             </p>
-            <div className="pt-1">
-              <button
-                onClick={onOpenAcademicReport}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#244D42] hover:bg-[#2F5E52] text-white text-xs font-semibold rounded-lg transition-colors border border-[#316154]"
-              >
-                <FileText className="w-3.5 h-3.5 text-[#A8C9B5]" />
-                <span>Naskah Laporan Tugas Dosen</span>
-              </button>
-            </div>
           </div>
 
           {/* Col 2: Layanan BK */}
@@ -134,6 +121,14 @@ export const Footer: React.FC<FooterProps> = ({
             <ul className="space-y-1.5">
               <li>
                 <button
+                  onClick={() => onNavigate('tanya')}
+                  className="hover:text-white transition-colors font-semibold text-[#A8C9B5]"
+                >
+                  Ruang Tanya & FAQ
+                </button>
+              </li>
+              <li>
+                <button
                   onClick={() => onNavigate('konseling')}
                   className="hover:text-white transition-colors"
                 >
@@ -146,14 +141,6 @@ export const Footer: React.FC<FooterProps> = ({
                   className="hover:text-white transition-colors"
                 >
                   Artikel & Perpustakaan
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('tanya')}
-                  className="hover:text-white transition-colors"
-                >
-                  Ruang Tanya & FAQ
                 </button>
               </li>
               <li>

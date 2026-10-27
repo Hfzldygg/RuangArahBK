@@ -11,7 +11,6 @@ import { PrivasiEtikaPage } from './pages/PrivasiEtikaPage';
 import { TentangPage } from './pages/TentangPage';
 import { ArticleModal } from './components/ArticleModal';
 import { PetaArahkuModal } from './components/PetaArahkuModal';
-import { AcademicReportModal } from './components/AcademicReportModal';
 import { Page, BKCategory, Article } from './types';
 
 export default function App() {
@@ -19,7 +18,6 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<BKCategory>('pribadi');
   const [activeArticle, setActiveArticle] = useState<Article | null>(null);
   const [isPetaArahkuOpen, setIsPetaArahkuOpen] = useState(false);
-  const [isAcademicReportOpen, setIsAcademicReportOpen] = useState(false);
 
   // Scroll to top whenever page changes
   useEffect(() => {
@@ -44,13 +42,12 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 antialiased selection:bg-sky-100 selection:text-sky-900 font-sans">
+    <div className="min-h-screen flex flex-col bg-[#FBF9F5] text-[#1E3830] antialiased selection:bg-[#EAF6EF] selection:text-[#244D42] font-sans">
       {/* Main Navigation Bar */}
       <Navbar
         currentPage={currentPage}
         onNavigate={handleNavigate}
         onOpenPetaArahku={() => setIsPetaArahkuOpen(true)}
-        onOpenAcademicReport={() => setIsAcademicReportOpen(true)}
       />
 
       {/* Page Routing Body */}
@@ -61,7 +58,6 @@ export default function App() {
             onSelectCategory={handleSelectCategory}
             onOpenArticle={handleOpenArticle}
             onOpenPetaArahku={() => setIsPetaArahkuOpen(true)}
-            onOpenAcademicReport={() => setIsAcademicReportOpen(true)}
           />
         )}
 
@@ -101,7 +97,6 @@ export default function App() {
         {currentPage === 'tentang' && (
           <TentangPage
             onNavigate={handleNavigate}
-            onOpenAcademicReport={() => setIsAcademicReportOpen(true)}
             onOpenPetaArahku={() => setIsPetaArahkuOpen(true)}
           />
         )}
@@ -110,7 +105,6 @@ export default function App() {
       {/* Footer */}
       <Footer
         onNavigate={handleNavigate}
-        onOpenAcademicReport={() => setIsAcademicReportOpen(true)}
         onOpenPetaArahku={() => setIsPetaArahkuOpen(true)}
       />
 
@@ -135,11 +129,6 @@ export default function App() {
           setIsPetaArahkuOpen(false);
           handleGoToCounseling(cat);
         }}
-      />
-
-      <AcademicReportModal
-        isOpen={isAcademicReportOpen}
-        onClose={() => setIsAcademicReportOpen(false)}
       />
     </div>
   );
